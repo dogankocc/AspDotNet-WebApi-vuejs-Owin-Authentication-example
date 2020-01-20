@@ -1,5 +1,5 @@
 ﻿1. New Project > Visual C# > Asp .Net Web Application > Empty and select WebApi > Ok
-And  config.EnableCors(); Add to WebApiConfig ,
+And put this project codes for WebApiConfig ,
 2. Right Click Models , Add new item and select data and ADO NET Entity Model and make connetion configuration and select sql tables,procedures ...
 3. Install these nuget packages:
 Microsoft.AspNet.WebApi.Cors
