@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import LoginForm from '../components/LoginForm.vue'
+import Home from '../components/Home.vue'
+import Layout from '../components/Layout.vue'
 
 Vue.use(Router)
 
@@ -22,6 +24,19 @@ export default new Router({
         path:'/Login',
         name:'LoginForm',
         component:LoginForm ,
+       
+    },
+    {
+        path:'/Home',
+        name:'Home',
+        component:Home ,
+       
+    }
+    ,
+    {
+        path:'/App',
+        name:'Layout',
+        component:Layout ,
        
     }
   ]

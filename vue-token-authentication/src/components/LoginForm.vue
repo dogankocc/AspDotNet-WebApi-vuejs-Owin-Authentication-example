@@ -1,8 +1,57 @@
 <template>
    <div>
-    <v-text-field outlined placeholder="Username" :rules="rules" v-model="username"/>
-    <v-text-field outlined placeholder="Password" :rules="rules" v-model="password"/>
-    <v-btn color="primary" @click="signIn">Signin</v-btn>
+    <v-app id="inspire">
+    <v-content>
+      <v-container
+        class="fill-height"
+        fluid
+      >
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-col
+            cols="12"
+            sm="8"
+            md="4"
+          >
+            <v-card class="elevation-12">
+              <v-toolbar
+                color="primary"
+                dark
+                flat
+              >
+                <v-toolbar-title>Login form</v-toolbar-title>
+                <v-spacer />
+              </v-toolbar>
+              <v-card-text>
+                <v-form>
+                  <v-text-field
+                    label="Username"
+                    name="username"
+                    type="text"
+                    :rules="rules" v-model="username"
+                  />
+
+                  <v-text-field
+                    id="password"
+                    label="Password"
+                    name="password"
+                    type="password"
+                    :rules="rules" v-model="password"
+                  />
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn color="primary" @click="signIn">Login</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-content>
+  </v-app>
   </div>
 </template>
 
@@ -11,6 +60,8 @@
 
 var accsess_token = null;
 var dispatch = null;
+var goHomeMethod = null;
+
 export default {
   name: 'LoginForm',
   props: {
@@ -69,6 +120,7 @@ export default {
 
 
         dispatch = this.$store.dispatch;
+        goHomeMethod = this.goHome;
         //get clientId,clientSecret from database with user password
         //var clientId = "C3586A45-AF64-4B1C-AAEA-4BD9C1DA15B3";
         //var clientSecret = "9184BF83-4C1E-47FA-BD3C-A8CF70E00360";
@@ -87,7 +139,7 @@ export default {
         request0.onreadystatechange = function(){
             if (request0.readyState === 4) {
                 var response = JSON.stringify(request0.responseText);
-                alert("response request0:  "+response)
+                alert("response GetClientIdentity:  "+response)
                 response = JSON.parse(response);
                 clientId = response.ClientId;
                 clientSecret = response.ClientSecret;
@@ -107,7 +159,8 @@ export default {
                         var resObj = JSON.parse(request.responseText);
                         accsess_token = resObj.access_token;    
                         dispatch("putToken" ,{username:'Anurag',token:accsess_token} );
-                        alert(accsess_token)
+                        alert("accsess_token recorded store state:  " +accsess_token)
+                        goHomeMethod();
                     }
                 }
             }
@@ -140,6 +193,10 @@ export default {
         });
         */
         },
+        goHome:function(){
+            this.$router.push({ name: "Layout" , params: {title: 'Home' }});//{ path: "App" ,component: FooComponent,  props: true } 
+            //window.location.href = "/Home"
+        }
 
   }
 }

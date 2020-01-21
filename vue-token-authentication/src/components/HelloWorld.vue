@@ -2,6 +2,7 @@
      <v-app>
         <v-content>
           <v-container>
+            <img alt="Vue logo" src="../assets/logo.png">  
               <div class="hello">
                     {{msg}}
                   <p @click="goLogin" class="link_">Sign in</p>
@@ -34,5 +35,4 @@ export default {
   color: #42b983;
   
 }
-
 </style>

@@ -1,8 +1,9 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
 
-     <router-view>    <HelloWorld msg="Welcome to Your Vue.js App"/></router-view>
+  <div id="app">
+
+
+     <router-view><HelloWorld msg="Welcome to Your Vue.js App"/></router-view>
   </div>
 </template>
 
@@ -16,7 +17,6 @@ export default {
     HelloWorld,
     
   },
-
 }
 </script>
 
