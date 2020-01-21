@@ -12,3 +12,4 @@ Newtonsoft.json
 5. Add current codes in Startup 
 6. Models > Right Click > Add > New Item > class > AuthorizationServerProvider > Add current codes in AuthorizationServerProvider
 7. Do same process for ClientMasterRepository ,ClientMasterRepository ,UserMasterRepository
+8. And put this project codes for ClientMasterRepository ,ClientMasterRepository ,UserMasterRepository
