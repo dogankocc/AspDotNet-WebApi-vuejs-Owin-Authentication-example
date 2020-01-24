@@ -58,9 +58,8 @@
 <script>
 //import $ from 'jquery';
 
-var accsess_token = null;
 var dispatch = null;
-var goHomeMethod = null;
+var validateUserTokenMethod = null;
 
 export default {
   name: 'LoginForm',
@@ -120,7 +119,7 @@ export default {
 
 
         dispatch = this.$store.dispatch;
-        goHomeMethod = this.goHome;
+        validateUserTokenMethod = this.validateUserToken;
         //get clientId,clientSecret from database with user password
         //var clientId = "C3586A45-AF64-4B1C-AAEA-4BD9C1DA15B3";
         //var clientSecret = "9184BF83-4C1E-47FA-BD3C-A8CF70E00360";
@@ -157,52 +156,74 @@ export default {
                 request.onreadystatechange = function(){
                     if (request.readyState === 4) {
                         var resObj = JSON.parse(request.responseText);
-                        accsess_token = resObj.access_token;    
+                        var accsess_token = resObj.access_token;    
                         dispatch("putToken" ,{username:'Anurag',token:accsess_token} );
-                        alert("accsess_token recorded store state:  " +accsess_token)
-                        goHomeMethod();
+                        alert("accsess_token recorded store state:  " +accsess_token);
+                        validateUserTokenMethod();
                     }
                 }
             }
         }
 
-        /*
-        $.ajax({
-            type: 'POST',
-            url: "http://localhost:55808/token",
-            data: { username: 'Anurag', password: '123456', grant_type: 'password' },
-            dataType: "json",
-            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-            xhrFields: {
-                withCredentials: true
-            },
-            // crossDomain: true,
-            headers: {
-                'Authorization': 'Basic ' + authorizationBasic
-            },
-            //beforeSend: function (xhr) {
-            //},
-            success: function (result) {
-                var token = result;
-            },
-            //complete: function (jqXHR, textStatus) {
-            //},
-            error: function (req, status, error) {
-                alert(error);
-            }
-        });
-        */
         },
-        goHome:function(){
+        validateUserToken:function(){                 
+                var accsess_token = this.$store.state.tokens["Anurag"];
+                alert("validateUserToken  accsess_token:  "+accsess_token)
+                var redirectToHomeMethod = this.redirectToHome;
+                var request = new XMLHttpRequest();
+                
+                request.open('GET', "http://localhost:55808/api/user/validateusertoken", true);
+                request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+                request.setRequestHeader('Authorization', 'Bearer ' +accsess_token);
+                request.setRequestHeader('Accept', '*/*');
+                request.send();
+
+                request.onreadystatechange = function(){
+                    if (request.readyState === 4 ) {
+                        alert("validateusertoken   "+JSON.stringify(request.responseText) +"    "+request.status)   
+  
+                        redirectToHomeMethod();
+                    }
+                }
+
+        },
+        redirectToHome(){
             this.$router.push({ name: "Layout" , params: {title: 'Home' }});//{ path: "App" ,component: FooComponent,  props: true } 
             //window.location.href = "/Home"
         }
 
   }
 }
-      
+    
+/*
+$.ajax({
+    type: 'POST',
+    url: "http://localhost:55808/token",
+    data: { username: 'Anurag', password: '123456', grant_type: 'password' },
+    dataType: "json",
+    contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+    xhrFields: {
+        withCredentials: true
+    },
+    // crossDomain: true,
+    headers: {
+        'Authorization': 'Basic ' + authorizationBasic
+    },
+    //beforeSend: function (xhr) {
+    //},
+    success: function (result) {
+        var token = result;
+    },
+    //complete: function (jqXHR, textStatus) {
+    //},
+    error: function (req, status, error) {
+        alert(error);
+    }
+});
+*/  
 </script>
 
 <style scoped>
 
 </style>
+
