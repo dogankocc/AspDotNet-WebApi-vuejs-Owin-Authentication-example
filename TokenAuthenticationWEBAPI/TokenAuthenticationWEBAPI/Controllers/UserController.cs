@@ -1,7 +1,10 @@
-﻿using System.Linq;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Helpers;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using TokenAuthenticationWEBAPI.DTOs;
 using TokenAuthenticationWEBAPI.Services;
 
@@ -17,15 +20,15 @@ namespace TokenAuthenticationInWebAPI.Controllers
         }
 
         //This resource is For all types of role
-        [Authorize(Roles = "SuperAdmin, Admin, User")]
+        [Authorize(Roles = "SuperAdmin, Admin ,User")]
         [HttpGet]
         [Route("api/user/resource1")]
         public IHttpActionResult GetResource1()
         {
             var identity = (ClaimsIdentity)User.Identity;
-            var clientID = identity.Claims.FirstOrDefault(c => c.Type == "ClientID").Value;
-            var clientName = identity.Claims.FirstOrDefault(c => c.Type == "ClientName").Value;
-            var clientSecret = identity.Claims.FirstOrDefault(c => c.Type == "ClientSecret").Value;
+            IEnumerable<Claim> claims = identity.Claims;
+            var username = claims.FirstOrDefault(e => e.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+
 
             return Ok("Hello: " + identity.Name);
         }
@@ -55,7 +58,7 @@ namespace TokenAuthenticationInWebAPI.Controllers
             return Ok("Hello " + identity.Name + "Your Role(s) are: " + string.Join(",", roles.ToList()));
         }
 
-        //[Authorize(Roles = "SuperAdmin, Admin, User")]
+
         [HttpPost]
         [Route("api/user/GetClientIdentity")]
         public ClientDTO GetClientIdentity([FromBody] ClientRequestDTO clientRequest)
@@ -64,8 +67,14 @@ namespace TokenAuthenticationInWebAPI.Controllers
             return Service.GetClientIdentity(clientRequest.clientName);
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("api/user/validateusertoken")]
+        public HttpResponseMessage ValidateUserToken()
+        {
+            return new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+        }
 
 
-    
     }
 }
